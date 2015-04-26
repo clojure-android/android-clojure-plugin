@@ -21,5 +21,11 @@ public class AndroidClojurePlugin implements Plugin<Project> {
         if (!androidPlugin) {
             throw new ProjectConfigurationException("Please apply an Android plugin before applying the 'android-clojure' plugin.", null)
         }
+
+        def androidExtension = project.extensions.getByName 'android'
+        androidExtension.extensions.add('clojureOptions', new ClojureCompileOptionsExtension())
+        androidExtension.sourceSets.each { sourceSet ->
+            sourceSet.extensions.add('clojure', new ClojureSourceDirectorySet(sourceSet.name, project) )
+        }
     }
 }
