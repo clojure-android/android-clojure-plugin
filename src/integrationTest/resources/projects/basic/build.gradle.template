@@ -1,0 +1,29 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url '@@testMavenRepo@@'
+        }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.2.0'
+        classpath 'org.clojure-android:android-clojure-plugin:@@clojurePluginVersion@@'
+    }
+}
+
+apply plugin: 'android'
+apply plugin: 'android-clojure'
+
+android {
+    compileSdkVersion '@@compileSdkVersion@@'
+    buildToolsVersion '@@buildToolsVersion@@'
+}
+
+dependencies {
+    compile 'org.clojure:clojure:1.6.0'
+}
+
+repositories {
+    mavenCentral()
+}
