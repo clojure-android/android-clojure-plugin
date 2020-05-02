@@ -1,4 +1,4 @@
 .gradle/
-.idea/tasks.xml
-.idea/workspace.xml
+.idea/
 build/
+*.iml
