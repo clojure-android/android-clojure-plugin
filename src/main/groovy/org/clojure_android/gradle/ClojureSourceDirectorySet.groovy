@@ -1,7 +1,6 @@
 package org.clojure_android.gradle
 
 import org.gradle.api.file.FileCollection
-import org.gradle.api.file.FileTree
 import org.gradle.api.internal.file.FileResolver
 
 /**
