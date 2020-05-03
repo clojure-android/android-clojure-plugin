@@ -6,26 +6,35 @@ sourceSets {
     integrationTest
 }
 
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
-    testCompile 'com.android.tools.build:gradle:1.2.0'
-
-    integrationTestCompile gradleApi()
-    integrationTestCompile localGroovy()
+    implementation gradleApi()
+    implementation localGroovy()
+    testImplementation 'com.android.tools.build:gradle:1.2.0'
+    testImplementation 'junit:junit:4.13'
+    testImplementation 'commons-io:commons-io:2.6'
+    testImplementation gradleApi()
+    testImplementation localGroovy()
+    integrationTestImplementation gradleTestKit()
 }
 
 description = 'Clojure plugin for the Gradle-based Android build system'
 group = 'org.clojure-android'
 version = '0.1.0-SNAPSHOT'
 
-project.ext.compileSdkVersion = 'android-21'
-project.ext.buildToolsVersion = '22.0.1'
-project.ext.androidSdkDir = getAndroidSdkDir()
+ext {
+    androidPluginVersion = '3.6.3'
+    compileSdkVersion = 28
+    buildToolsVersion = '28.0.3'
+    androidSdkDir = getAndroidSdkDir()
+}
 
 publishing {
     repositories {
@@ -46,10 +55,11 @@ task integrationTest(type: Test) {
     systemProperty 'android.sdk.dir', project.androidSdkDir
     systemProperty 'clojure.plugin.version', "${version}-test"
     systemProperty 'test.maven.repo', publishing.repositories.test.url
+    systemProperty 'android.plugin.version', project.androidPluginVersion
     systemProperty 'compile.sdk.version', project.compileSdkVersion
     systemProperty 'build.tools.version', project.buildToolsVersion
 
-    testClassesDir = sourceSets.integrationTest.output.classesDir
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 integrationTest.description 'Runs the integration tests.'

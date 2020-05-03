@@ -16,9 +16,7 @@ import javax.inject.Inject
 public class AndroidClojurePlugin implements Plugin<Project> {
     private static final List<String> ANDROID_PLUGIN_IDS = [
             'com.android.application',
-            'android',
-            'com.android.library',
-            'android-library'
+            'com.android.library'
     ]
 
     private final FileResolver fileResolver
@@ -80,9 +78,9 @@ public class AndroidClojurePlugin implements Plugin<Project> {
                 }
                 clojureCompileTask.classpath = sourceSets.inject(javaCompileTask.classpath) { fileCollection, sourceSet ->
                     fileCollection + sourceSet.clojure.classpath
-                } + project.files(androidPlugin.androidBuilder.bootClasspath)
+                } + project.files(androidExtension.bootClasspath)
 
-                project.tasks.findByName("preDex${variantName}").dependsOn clojureCompileTask
+                project.tasks.findByName("compile${variantName}Sources").dependsOn clojureCompileTask
             }
         }
     }

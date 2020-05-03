@@ -1,9 +1,8 @@
 package org.clojure_android.gradle
 
 import org.gradle.api.Project
-import org.gradle.api.ProjectConfigurationException
+import org.gradle.api.internal.plugins.PluginApplicationException
 import org.gradle.testfixtures.ProjectBuilder
-import org.hamcrest.CoreMatchers
 import org.junit.Assert
 import org.junit.Test
 
@@ -11,19 +10,12 @@ import org.junit.Test
  * Basic test suite for invoking the Clojure/Android plugin.
  */
 public class AndroidClojurePluginInvocationTest {
-    @Test
+    @Test(expected = PluginApplicationException)
     public void pluginRequiresAndroid() {
         Project project = ProjectBuilder.builder().build()
-        try {
-            project.pluginManager.apply 'org.clojure-android.android-clojure-plugin'
-            Assert.fail 'android-clojure plugin should not have applied'
-        } catch(Throwable t) {
-            if (t.getCause() instanceof ProjectConfigurationException) {
-                CoreMatchers.containsString('Please apply an Android plugin').matches(t.cause.message)
-            } else {
-                Assert.fail 'Wrong type of exception thrown'
-            }
-        }
+
+        project.pluginManager.apply 'org.clojure-android.android-clojure-plugin'
+        Assert.fail 'android-clojure plugin should not have applied'
     }
 
     @Test

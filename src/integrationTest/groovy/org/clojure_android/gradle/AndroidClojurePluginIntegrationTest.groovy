@@ -30,6 +30,7 @@ class AndroidClojurePluginIntegrationTest {
                 new File(projectDir, 'build.gradle.template').eachLine { line ->
                     w << line
                             .replaceAll('@@clojurePluginVersion@@', System.getProperty('clojure.plugin.version'))
+                            .replaceAll('@@androidPluginVersion@@', System.getProperty('android.plugin.version'))
                             .replaceAll('@@testMavenRepo@@', System.getProperty('test.maven.repo'))
                             .replaceAll('@@compileSdkVersion@@', System.getProperty('compile.sdk.version'))
                             .replaceAll('@@buildToolsVersion@@', System.getProperty('build.tools.version'))
