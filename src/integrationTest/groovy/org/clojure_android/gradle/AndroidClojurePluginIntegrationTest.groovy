@@ -1,8 +1,7 @@
 package org.clojure_android.gradle
 
 import org.apache.commons.io.FileUtils
-import org.gradle.tooling.GradleConnector
-import org.gradle.tooling.ProjectConnection
+import org.gradle.testkit.runner.GradleRunner
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -46,25 +45,15 @@ class AndroidClojurePluginIntegrationTest {
 
     @Test
     void minimalApplication() {
-        GradleConnector connector = GradleConnector.newConnector().forProjectDirectory(projectDir)
-        ProjectConnection connection = connector.connect()
-        try {
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream()
-            ByteArrayOutputStream errStream = new ByteArrayOutputStream()
-            connection.newBuild()
-                    .forTasks('clean', 'assemble')
-                    .setStandardOutput(outStream)
-                    .setStandardError(errStream)
-                    .run()
-            println new String(outStream.toByteArray(), 'UTF-8')
-            println new String(errStream.toByteArray(), 'UTF-8')
+        GradleRunner.create()
+                .withProjectDir(projectDir)
+                .withArguments('clean', 'assemble')
+                .forwardOutput()
+                .build()
 
-            Assert.assertTrue(new File(projectDir, 'build/intermediates/classes/debug/org/clojure_android/gradle/basic/MainActivity.class').exists())
-            Assert.assertTrue(new File(projectDir, 'build/intermediates/classes/debug/org/clojure_android/gradle/basic/MainActivity__init.class').exists())
-            Assert.assertTrue(new File(projectDir, 'build/intermediates/classes/release/org/clojure_android/gradle/basic/MainActivity.class').exists())
-            Assert.assertTrue(new File(projectDir, 'build/intermediates/classes/release/org/clojure_android/gradle/basic/MainActivity__init.class').exists())
-        } finally {
-            connection.close()
-        }
+        Assert.assertTrue(new File(projectDir, 'build/intermediates/javac/debug/classes/org/clojure_android/gradle/basic/MainActivity.class').exists())
+        Assert.assertTrue(new File(projectDir, 'build/intermediates/javac/debug/classes/org/clojure_android/gradle/basic/MainActivity__init.class').exists())
+        Assert.assertTrue(new File(projectDir, 'build/intermediates/javac/release/classes/org/clojure_android/gradle/basic/MainActivity.class').exists())
+        Assert.assertTrue(new File(projectDir, 'build/intermediates/javac/release/classes/org/clojure_android/gradle/basic/MainActivity__init.class').exists())
     }
 }
